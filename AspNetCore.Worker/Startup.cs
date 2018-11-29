@@ -25,7 +25,8 @@ namespace AspNetCore.Worker
             /// Dependency Injection Implementation Here Or Inject Servie Collection
             /// services.AddTransit<>();
             /// 
-            services.AddHttpRequest("https://jsonplaceholder.typicode.com");
+            services.AddHttpRequest()
+                    .AddHttpBaseAddress("Test", "https://reqres.in");
 
             // This is service provider for create instance of DI object
             ServiceProvider provider = services.BuildServiceProvider();
@@ -33,7 +34,9 @@ namespace AspNetCore.Worker
             // This is an example of how to create instance of DI object
             var _httpRequestFactory = provider.GetService<IHttpRequestFactory>();
 
-            var result =  _httpRequestFactory.Get("/todos/1").GetAwaiter().GetResult();
+            _httpRequestFactory = _httpRequestFactory.BaseAddress("Test");
+
+            var result =  _httpRequestFactory.Get("/api/users?page=2").GetAwaiter().GetResult();
 
             if(result.IsSuccessStatusCode)
             {

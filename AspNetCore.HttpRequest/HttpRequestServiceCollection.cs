@@ -17,17 +17,22 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        //public static iservicecollection addhttprequest(this iservicecollection services, string uriname, string baseuri)
-        //{
-        //    services.addhttpclient(uriname, x =>
-        //    {
-        //        x.baseaddress = new system.uri(baseuri);
-        //    });
+        public static IServiceCollection AddHttpRequest(this IServiceCollection services)
+        {
+            services.AddSingleton<HttpRequestBuilder>();
+            services.AddSingleton<IHttpRequestFactory, HttpRequestFactory>();
 
-        //    services.addsingleton<httprequestbuilder>();
-        //    services.addsingleton<ihttprequestfactory, httprequestfactory>();
+            return services;
+        }
 
-        //    return services;
-        //}
+        public static IServiceCollection AddHttpBaseAddress(this IServiceCollection services, string BaseAddressName, string baseUri)
+        {
+            services.AddHttpClient(BaseAddressName, x =>
+            {
+                x.BaseAddress = new System.Uri(baseUri);
+            });
+
+            return services;
+        }
     }
 }

@@ -8,7 +8,9 @@ namespace AspNetCore.HttpRequest
 {
     public class HttpRequestBuilder
     {
-        private readonly HttpClient _httpClient;
+        private HttpClient _httpClient;
+
+        private readonly IHttpClientFactory _httpClientFactory;
         private HttpMethod method = null;
         private string requestUri = string.Empty;
         private HttpContent content = null;
@@ -16,10 +18,17 @@ namespace AspNetCore.HttpRequest
         private string acceptHeader = "application/json";
         private TimeSpan timeout = TimeSpan.FromSeconds(30);
 
-        public HttpRequestBuilder(IHttpClientFactory httpClietnFactory)
+        public HttpRequestBuilder(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClietnFactory.CreateClient("AspNetCore.HttpRequest");
+            _httpClientFactory = httpClientFactory;
+            _httpClient = _httpClientFactory.CreateClient("AspNetCore.HttpRequest");
             _httpClient.Timeout = this.timeout;
+        }
+
+        public HttpRequestBuilder SetBaseAddress(string BaseAddressName)
+        {
+            _httpClient = _httpClientFactory.CreateClient(BaseAddressName);
+            return this;
         }
 
         public HttpRequestBuilder AddMethod(HttpMethod httpMethod)

@@ -5,11 +5,17 @@ namespace AspNetCore.HttpRequest
 {
     public class HttpRequestFactory : IHttpRequestFactory
     {
-        private readonly HttpRequestBuilder _httpRequetBuilder;
+        private HttpRequestBuilder _httpRequetBuilder;
 
         public HttpRequestFactory(HttpRequestBuilder httpRequetBuilder)
         {
             _httpRequetBuilder = httpRequetBuilder;
+        }
+
+        public HttpRequestFactory BaseAddress(string BaseAddressName)
+        {
+            _httpRequetBuilder = _httpRequetBuilder.SetBaseAddress(BaseAddressName);
+            return this;
         }
 
         public async Task<HttpResponseMessage> Get(string requestUri)

@@ -19,5 +19,7 @@ namespace AspNetCore.HttpRequest
 
         Task<HttpResponseMessage> Delete(string requestUri);
         Task<HttpResponseMessage> Delete(string requestUri, string bearerToken);
+
+        HttpRequestFactory BaseAddress(string BaseAddressName);
     }
 }
